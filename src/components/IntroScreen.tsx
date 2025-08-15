@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
 import logoImage from '@/assets/intuition-logo.png';
-import { useTextToSpeech } from '@/hooks/useTextToSpeech';
 
 interface IntroScreenProps {
   onStart: () => void;
@@ -10,24 +9,12 @@ interface IntroScreenProps {
 
 export const IntroScreen = ({ onStart }: IntroScreenProps) => {
   const [showStory, setShowStory] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const { speak } = useTextToSpeech();
 
-  const handleStart = async () => {
-    if (isPlaying) return;
-    
-    setIsPlaying(true);
+  const handleStart = () => {
     setShowStory(true);
-    
-    try {
-      await speak("In a world where trust is rare, and choices shape your future… how well do you trust your intuition?");
-    } catch (error) {
-      console.error('Voice playback failed:', error);
-    }
-    
     setTimeout(() => {
       onStart();
-    }, 2000);
+    }, 3000);
   };
 
   return (
@@ -70,11 +57,10 @@ export const IntroScreen = ({ onStart }: IntroScreenProps) => {
             <Button 
               onClick={handleStart}
               size="lg"
-              disabled={isPlaying}
               className="bg-gradient-to-r from-primary to-accent hover:shadow-lg hover:shadow-accent/30 transition-all duration-300 text-base sm:text-lg px-8 sm:px-12 py-4 sm:py-6 w-full sm:w-auto"
             >
               <Play className="mr-2 h-5 w-5 sm:h-6 sm:w-6" />
-              {isPlaying ? 'Speaking...' : 'Begin the Test'}
+              Begin the Test
             </Button>
           </>
         ) : (
