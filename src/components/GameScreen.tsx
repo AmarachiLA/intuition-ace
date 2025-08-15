@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { RotateCcw } from 'lucide-react';
 import logoImage from '@/assets/intuition-logo.png';
+import { useGameSounds } from '@/hooks/useGameSounds';
 
 interface GameScreenProps {
   onRestart: () => void;
@@ -17,6 +18,8 @@ export const GameScreen = ({ onRestart }: GameScreenProps) => {
   const [round, setRound] = useState<number>(1);
   const [selectedCard, setSelectedCard] = useState<number | null>(null);
   const [showCenterNumber, setShowCenterNumber] = useState<boolean>(false);
+  
+  const { playCardClick, playCorrect, playWrong, playTick, playGameOver } = useGameSounds();
 
   const generateRound = () => {
     const center = Math.floor(Math.random() * 100) + 1;
@@ -41,8 +44,10 @@ export const GameScreen = ({ onRestart }: GameScreenProps) => {
   const handleCardClick = (index: number) => {
     if (gameState !== 'playing') return;
     
+    playCardClick();
     setSelectedCard(index);
     if (choiceNumbers[index] === centerNumber) {
+      playCorrect();
       setGameState('correct');
       setShowCenterNumber(true);
       setScore(prev => prev + 1);
@@ -50,6 +55,10 @@ export const GameScreen = ({ onRestart }: GameScreenProps) => {
         nextRound();
       }, 2000);
     } else {
+      playWrong();
+      setTimeout(() => {
+        playGameOver();
+      }, 500);
       setGameState('gameOver');
     }
   };
@@ -66,13 +75,17 @@ export const GameScreen = ({ onRestart }: GameScreenProps) => {
   useEffect(() => {
     if (gameState === 'playing' && timeLeft > 0) {
       const timer = setTimeout(() => {
+        if (timeLeft <= 3 && timeLeft > 0) {
+          playTick();
+        }
         setTimeLeft(prev => prev - 1);
       }, 1000);
       return () => clearTimeout(timer);
     } else if (timeLeft === 0 && gameState === 'playing') {
+      playGameOver();
       setGameState('gameOver');
     }
-  }, [timeLeft, gameState]);
+  }, [timeLeft, gameState, playTick, playGameOver]);
 
   const getCardClassName = (index: number) => {
     let baseClass = "game-card text-center flex items-center justify-center min-h-[120px]";
