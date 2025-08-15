@@ -9,8 +9,8 @@ interface GameScreenProps {
 }
 
 export const GameScreen = ({ onRestart }: GameScreenProps) => {
-  const [centerNumber, setCenterNumber] = useState<number>(0);
-  const [choiceNumbers, setChoiceNumbers] = useState<number[]>([]);
+  const [centerNumber, setCenterNumber] = useState<number>(1);
+  const [choiceNumbers, setChoiceNumbers] = useState<number[]>([2, 3, 4]);
   const [timeLeft, setTimeLeft] = useState<number>(10);
   const [gameState, setGameState] = useState<'playing' | 'correct' | 'wrong' | 'timeout'>('playing');
   const [score, setScore] = useState<number>(0);
@@ -43,13 +43,15 @@ export const GameScreen = ({ onRestart }: GameScreenProps) => {
     if (choiceNumbers[index] === centerNumber) {
       setGameState('correct');
       setScore(prev => prev + 1);
+      setTimeout(() => {
+        nextRound();
+      }, 1500);
     } else {
       setGameState('wrong');
+      setTimeout(() => {
+        nextRound();
+      }, 1500);
     }
-    
-    setTimeout(() => {
-      nextRound();
-    }, 1500);
   };
 
   const nextRound = () => {
