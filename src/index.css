@@ -8,35 +8,47 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Dark Web3 Theme */
+    --background: 220 25% 8%;
+    --foreground: 210 40% 98%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 220 20% 12%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 220 20% 12%;
+    --popover-foreground: 210 40% 98%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 265 89% 78%;
+    --primary-foreground: 220 25% 8%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 220 15% 20%;
+    --secondary-foreground: 210 40% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 220 15% 16%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 190 100% 50%;
+    --accent-foreground: 220 25% 8%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 75% 60%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --success: 120 70% 55%;
+    --success-foreground: 220 25% 8%;
 
-    --radius: 0.5rem;
+    --border: 220 15% 20%;
+    --input: 220 15% 16%;
+    --ring: 190 100% 50%;
+
+    --radius: 0.75rem;
+
+    /* Game-specific colors */
+    --game-gradient-start: 265 50% 15%;
+    --game-gradient-end: 220 25% 8%;
+    --neon-glow: 190 100% 50%;
+    --timer-glow: 190 100% 60%;
+    --card-hover: 220 20% 18%;
+    --logo-blur: 265 89% 78% / 0.1;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +112,58 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-gradient-to-br from-[hsl(var(--game-gradient-start))] to-[hsl(var(--game-gradient-end))] text-foreground min-h-screen;
   }
+}
+
+@layer components {
+  .game-card {
+    @apply bg-card border border-border rounded-2xl p-8 transition-all duration-300 hover:bg-[hsl(var(--card-hover))] hover:shadow-2xl hover:shadow-accent/20 cursor-pointer backdrop-blur-sm;
+  }
+  
+  .game-card-center {
+    @apply bg-card border-2 border-primary rounded-3xl p-12 shadow-2xl shadow-primary/20 backdrop-blur-sm;
+  }
+  
+  .neon-glow {
+    @apply shadow-lg shadow-accent/50;
+    box-shadow: 0 0 20px hsl(var(--neon-glow) / 0.5), 0 0 40px hsl(var(--neon-glow) / 0.3);
+  }
+  
+  .success-glow {
+    @apply shadow-lg shadow-success/50;
+    box-shadow: 0 0 20px hsl(var(--success) / 0.7), 0 0 40px hsl(var(--success) / 0.4);
+  }
+  
+  .error-flash {
+    animation: errorFlash 0.6s ease-in-out;
+  }
+  
+  .card-flip {
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
+  }
+  
+  .card-flip.flipped {
+    transform: rotateY(180deg);
+  }
+  
+  .logo-rotate {
+    animation: logoRotate 30s linear infinite;
+  }
+  
+  .timer-bar {
+    @apply bg-gradient-to-r from-accent to-[hsl(var(--timer-glow))];
+    box-shadow: 0 0 10px hsl(var(--timer-glow) / 0.6);
+  }
+}
+
+@keyframes logoRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes errorFlash {
+  0%, 100% { background-color: hsl(var(--card)); }
+  50% { background-color: hsl(var(--destructive) / 0.3); }
 }
