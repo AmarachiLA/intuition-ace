@@ -11,7 +11,7 @@ interface GameScreenProps {
 
 export const GameScreen = ({ onRestart }: GameScreenProps) => {
   const [centerNumber, setCenterNumber] = useState<number>(1);
-  const [choiceNumbers, setChoiceNumbers] = useState<number[]>([2, 3, 4]);
+  const [choiceNumbers, setChoiceNumbers] = useState<number[]>([2, 3]);
   const [timeLeft, setTimeLeft] = useState<number>(10);
   const [gameState, setGameState] = useState<'playing' | 'correct' | 'gameOver'>('playing');
   const [score, setScore] = useState<number>(0);
@@ -23,8 +23,8 @@ export const GameScreen = ({ onRestart }: GameScreenProps) => {
 
   const generateRound = () => {
     const center = Math.floor(Math.random() * 100) + 1;
-    const correctPosition = Math.floor(Math.random() * 3);
-    const choices = Array(3).fill(0).map((_, index) => {
+    const correctPosition = Math.floor(Math.random() * 2);
+    const choices = Array(2).fill(0).map((_, index) => {
       if (index === correctPosition) return center;
       let num;
       do {
